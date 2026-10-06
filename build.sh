@@ -64,6 +64,7 @@ PY
   grep -Eq 'KERNEL_SU_UAPI_VERSION = 4;' KernelSU/uapi/supercall.h
   cat >> arch/arm64/configs/pipa_defconfig <<'CFG'
 CONFIG_KSU=y
+CONFIG_DEBUG_KERNEL=y
 CONFIG_THREAD_INFO_IN_TASK=y
 CONFIG_KSU_SUSFS=y
 CONFIG_KSU_SUSFS_SUS_PATH=y
@@ -87,6 +88,8 @@ compile)
     CLANG_TRIPLE=aarch64-linux-android- CROSS_COMPILE=aarch64-linux-android- \
     AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip)
   make "${args[@]}" pipa_defconfig
+  cp out/.config "$GITHUB_WORKSPACE/artifacts/evidence/kernel.config"
+  grep -E 'CONFIG_(KSU|KALLSYMS|DEBUG_KERNEL|THREAD_INFO_IN_TASK)' out/.config
   grep -qx 'CONFIG_KSU=y' out/.config
   grep -qx 'CONFIG_KSU_SUSFS=y' out/.config
   grep -qx 'CONFIG_KALLSYMS_ALL=y' out/.config

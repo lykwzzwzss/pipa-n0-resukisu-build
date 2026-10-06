@@ -20,8 +20,25 @@ jobs:
           df -h .
       - name: Fetch pinned kernel and root sources
         run: bash build.sh sources
+      - name: Restore Clang toolchain cache
+        id: clang-cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: |
+            clang
+            artifacts/evidence/clang-archive.sha256
+          key: pipa-clang-r547379-v1
       - name: Download and check Clang toolchain
+        if: steps.clang-cache.outputs.cache-hit != 'true'
         run: bash build.sh toolchain
+      - name: Save verified Clang toolchain cache
+        if: steps.clang-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: |
+            clang
+            artifacts/evidence/clang-archive.sha256
+          key: pipa-clang-r547379-v1
       - name: Apply SUSFS 2.3 and pipa compatibility fix
         run: bash build.sh patch
       - name: Configure and compile pipa MIUI kernel
@@ -44,6 +61,7 @@ jobs:
             build.log
             susfs-*.log
             device_kernel/out/.config
+            artifacts/evidence/kernel.config
             device_kernel/**/*.rej
           if-no-files-found: ignore
           retention-days: 14
