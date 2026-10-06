@@ -1,0 +1,49 @@
+name: Xiaomi Pad 6 N0 ReSukiSU 4.2.0-rc3 SUSFS 2.3
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - name: Checkout build recipe
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Install build tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y bc bison flex build-essential libssl-dev libelf-dev liblz4-tool lz4 ccache zip python3 device-tree-compiler
+          df -h .
+      - name: Fetch pinned kernel and root sources
+        run: bash build.sh sources
+      - name: Download and check Clang toolchain
+        run: bash build.sh toolchain
+      - name: Apply SUSFS 2.3 and pipa compatibility fix
+        run: bash build.sh patch
+      - name: Configure and compile pipa MIUI kernel
+        run: bash build.sh compile
+      - name: Package kernel and build evidence
+        run: bash build.sh package
+      - name: Upload kernel artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pipa-N0-ReSukiSU-4.2.0-rc3-SUSFS-2.3-MIUI
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pipa-build-diagnostics
+          path: |
+            build.log
+            susfs-*.log
+            device_kernel/out/.config
+            device_kernel/**/*.rej
+          if-no-files-found: ignore
+          retention-days: 14

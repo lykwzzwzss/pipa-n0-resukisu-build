@@ -1,0 +1,21 @@
+{
+  "kernel_repository": "bcggxx/android_kernel_xiaomi_n0_pipa",
+  "kernel_branch": "n0-A15",
+  "kernel_commit": "07c4db462801567b2dc363cdd642baea38867c91",
+  "root_repository": "Baka-SU/BakaSU",
+  "root_tag": "v4.2.0-rc3",
+  "root_commit": "239e1e8871b8fcd51a6e5b3002e0ba522fdd99fb",
+  "susfs_version": "v2.3.0",
+  "patch_repository": "bcggxx/NonGKI_Kernel_Build_2nd",
+  "patch_commit": "0b18ce53f88e1b545ef8798f4c757bea0723096a",
+  "fix_repository": "bcggxx/backups",
+  "fix_commit": "28a4cb975e8c121b8ffabc629b21e8e0b7770235",
+  "anykernel_repository": "bcggxx/AnyKernel3",
+  "anykernel_commit": "52c2c49b6abd92a922919c58d7d7b2572baf381a",
+  "clang_version": "clang-r547379",
+  "patch_sha256": {
+    "susfs-4.19.patch": "125fe593982905763381182a67db90cba82588d60bad3b4ae68a96a385192e23",
+    "susfs-inline-hooks.sh": "d6fc8e7dc05a06f33140fcda6e8142db910efef3d594f615bf9acba63af8a4b0",
+    "susfs-n0-fix.patch": "2d83defb07bb9843cbc4b5f378831b8e523d7333f0cc3704791d98edc1e98019"
+  }
+}
