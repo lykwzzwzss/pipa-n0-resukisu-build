@@ -65,6 +65,8 @@ PY
   cat >> arch/arm64/configs/pipa_defconfig <<'CFG'
 CONFIG_KSU=y
 CONFIG_DEBUG_KERNEL=y
+# CONFIG_FTRACE is not set
+# CONFIG_SCHED_DEBUG is not set
 CONFIG_THREAD_INFO_IN_TASK=y
 CONFIG_KSU_SUSFS=y
 CONFIG_KSU_SUSFS_SUS_PATH=y
@@ -93,6 +95,7 @@ compile)
   grep -qx 'CONFIG_KSU=y' out/.config
   grep -qx 'CONFIG_KSU_SUSFS=y' out/.config
   grep -qx 'CONFIG_KALLSYMS_ALL=y' out/.config
+  grep -qx '# CONFIG_FTRACE is not set' out/.config
   make "${args[@]}" -j"$(nproc)" 2>&1 | tee "$GITHUB_WORKSPACE/build.log"
   test -s out/arch/arm64/boot/Image
   test -s out/arch/arm64/boot/dtbo.img
